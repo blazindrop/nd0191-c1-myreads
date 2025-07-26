@@ -74,14 +74,8 @@ function App() {
             setWantToRead(bookMappings['wantToRead']);
             setRead(bookMappings['read']);
         }
-        console.log('Calling getBooks() in useEffect');
         getBooks();
     }, []);
-
-    useEffect(() => {
-        console.log('currentlyReading updated:');
-        console.log(currentlyReading);
-    }, [currentlyReading])
 
   const updateShowSearchPage = () => {
     setShowSearchPage(!showSearchPage);
