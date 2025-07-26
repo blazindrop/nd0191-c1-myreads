@@ -1,12 +1,7 @@
-import { useState } from 'react';
-
 const Book = ({ book, onShelfChange }) => {
-    // TODO: setShelf not needed? pass shelf as prop instead?
-    const [shelf, setShelf] = useState(book.shelf ? book.shelf : 'none');
+    book.shelf = (book.shelf ? book.shelf : "none");
     const updateShelf = (newShelf) => {
-        // TODO: see below.
-        //setShelf(newShelf);
-        onShelfChange(book, shelf, newShelf);
+        onShelfChange(book, newShelf);
     }
     return (
         <div className="book">
@@ -20,7 +15,7 @@ const Book = ({ book, onShelfChange }) => {
                     }}
                 ></div>
                 <div className="book-shelf-changer">
-                    <select value={shelf} onChange={(e) => updateShelf(e.target.value)}>
+                    <select value={book.shelf} onChange={(e) => updateShelf(e.target.value)}>
                         <option value="none" disabled>
                             Move to...
                         </option>

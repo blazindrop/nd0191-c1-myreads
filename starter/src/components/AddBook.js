@@ -1,37 +1,42 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import * as BooksAPI from "../BooksAPI";
 import Book from "./Book";
 
-const AddBook = ({ onSetShowSearchPage, onShelfChange }) => {
+const AddBook = ({ currentBooksOnShelves, onSetShowSearchPage, onShelfChange }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
 
     const updateQuery = (query) => {
-        console.log(`updating query to ${query}`);
         setQuery(query);
     }
 
     useEffect(() => {
         if (query) {
-            console.log('useEffect[query] called');
             const update = async () => {
                 const results = await BooksAPI.search(query);
-                console.log(results);
-                if (results.length === 0) {
+                if (!results.length || results.length === 0) {
                     setResults([]);
                 }
                 else {
-                    setResults(results);
+                    const newResults = results.map((r) => {
+                        const foundBookOnShelf = currentBooksOnShelves.find((b) => b.id === r.id);
+                        if (foundBookOnShelf) {
+                            r.shelf = foundBookOnShelf.shelf;
+                        }
+                        return r;
+                    });
+                    setResults(newResults);
                 }
             }
             update();
         }
-    }, [query]);
+    }, [query, currentBooksOnShelves]);
 
     return (
         <div className="search-books">
             <div className="search-books-bar">
-                <a className="close-search" onClick={() => onSetShowSearchPage()}>Close</a>
+                <Link to="/" className="close-search" onClick={() => onSetShowSearchPage()}>Close</Link>
                 <div className="search-books-input-wrapper">
                     <input
                         type="text"
@@ -42,11 +47,11 @@ const AddBook = ({ onSetShowSearchPage, onShelfChange }) => {
             </div>
             <div className="search-books-results">
                 <ol className="books-grid">
-                    {results.length > 0 && (results.map((book) => (
+                    {results.length > 0 && results.map((book) => (
                         <li key={book.id}>
                             <Book book={book} onShelfChange={onShelfChange} />
                         </li>
-                    )))}
+                    ))}
                 </ol>
             </div>
         </div>

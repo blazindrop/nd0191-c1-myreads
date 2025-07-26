@@ -1,6 +1,4 @@
 import BookShelf from "./BookShelf";
-import { useState, useEffect } from "react";
-import * as BooksAPI from "../BooksAPI";
 
 const ListBooks = ({currentlyReading, wantToRead, read, onShelfChange }) => {
     return (
@@ -15,7 +13,6 @@ const ListBooks = ({currentlyReading, wantToRead, read, onShelfChange }) => {
             </div>
             
         </div>
-        
     );
 }
 
